@@ -114,16 +114,16 @@ public class Application
                         if (player.alive())
                         {
                             if (k == KeyCode.LEFT) 
-                                player.setVelocity(-400, 0);
-                            else if (k == KeyCode.RIGHT)
                                 player.setVelocity(400, 0);
+                            else if (k == KeyCode.RIGHT)
+                                player.setVelocity(-400, 0);
 
-                            if (k == KeyCode.SPACE)
+                            if (k == KeyCode.S)
                             {
                                 if (player.reloaded())
                                 {
                                     beams.add(new Beam(player.getX(), player.getY() - SPRITE_SIZE / 2, 5, 0, -600, true));
-                                    player.setReloadTimer(0.333);
+                                    player.setReloadTimer(3);
                                 }
                             }
                         }
@@ -135,7 +135,7 @@ public class Application
 
                         if (((Invader) i).reloaded())
                         {
-                            beams.add(new Beam(i.getX(), i.getY() + SPRITE_SIZE / 2, 5 + ((Invader) i).getSprite(), 0, 400, false));
+                            beams.add(new Beam(i.getX(), i.getY() + SPRITE_SIZE / 2, 5 + ((Invader) i).getSprite(), 400, 0, false));
                             ((Invader) i).setReloadTimer(30);
                         }
                     }

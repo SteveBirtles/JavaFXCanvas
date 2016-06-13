@@ -16,7 +16,7 @@ public class Player extends SpaceEntity
         x += dx * frameLength;
         y += dy * frameLength;
 
-        if (x > Application.WINDOW_WIDTH - Application.SPRITE_SIZE / 2) x = Application.WINDOW_WIDTH - Application.SPRITE_SIZE / 2;
+        if (x > Application.WINDOW_WIDTH - Application.SPRITE_SIZE / 2) x = Application.SPRITE_SIZE / 2;
         if (x < Application.SPRITE_SIZE / 2) x = Application.SPRITE_SIZE / 2;        
 
         dx *= (1 - 10 * frameLength);

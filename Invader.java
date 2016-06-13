@@ -12,7 +12,7 @@ public class Invader extends SpaceEntity
         super(x, y, Application.SPRITE_SIZE / 2, sprite);
         dx = 0;
         dy = 0;
-        reloadTimer = rnd.nextInt(30) + 5;  
+        reloadTimer = rnd.nextInt(30) + 1;  
     }
 
     @Override

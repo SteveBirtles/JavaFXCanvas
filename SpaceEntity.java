@@ -62,7 +62,6 @@ public abstract class SpaceEntity
         if (expired || other.expired || friendly == other.friendly) return false;
         if (Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) < Math.pow(r + other.r, 2))
         {
-            expired = true;
             other.expired = true;
             return true;
         }
