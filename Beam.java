@@ -2,12 +2,12 @@
 public class Beam extends SpaceEntity
 {
 
-    public Beam(double x, double y, int sprite, double dx, double dy)
+    public Beam(double x, double y, int sprite, double dx, double dy, boolean friendly)
     {
         super(x, y, Application.BEAM_SIZE / 2, sprite);
         this.dx = dx;
         this.dy = dy;
-        expired = false;
+        this.friendly = friendly;
     }
 
     @Override

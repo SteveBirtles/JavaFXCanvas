@@ -1,4 +1,3 @@
-
 public class Player extends SpaceEntity
 {
 
@@ -8,6 +7,7 @@ public class Player extends SpaceEntity
     {
         super(x, y, Application.SPRITE_SIZE / 2, 0);
         reloadTimer = 0;
+        friendly = true;
     }
 
     @Override
@@ -35,6 +35,11 @@ public class Player extends SpaceEntity
     public void setReloadTimer(double time)
     {
         reloadTimer = time;
+    }
+
+    public boolean alive()
+    {
+        return !expired;
     }
 
 }

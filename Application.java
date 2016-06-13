@@ -111,30 +111,41 @@ public class Application
                     {
                         if (k == KeyCode.ESCAPE) Application.terminate();
 
-                        if (k == KeyCode.LEFT) 
-                            player.setVelocity(-400, 0);
-                        else if (k == KeyCode.RIGHT)
-                            player.setVelocity(400, 0);
-
-                        if (k == KeyCode.SPACE)
+                        if (player.alive())
                         {
-                            if (player.reloaded())
+                            if (k == KeyCode.LEFT) 
+                                player.setVelocity(-400, 0);
+                            else if (k == KeyCode.RIGHT)
+                                player.setVelocity(400, 0);
+
+                            if (k == KeyCode.SPACE)
                             {
-                                beams.add(new Beam(player.getX(), player.getY() - SPRITE_SIZE / 2, 5, 0, -600));
-                                player.setReloadTimer(0.333);
+                                if (player.reloaded())
+                                {
+                                    beams.add(new Beam(player.getX(), player.getY() - SPRITE_SIZE / 2, 5, 0, -600, true));
+                                    player.setReloadTimer(0.333);
+                                }
                             }
                         }
-
                     }
 
                     for (SpaceEntity i : invaders)
                     {
                         i.update(fr.getFrameLength());
+
+                        if (((Invader) i).reloaded())
+                        {
+                            beams.add(new Beam(i.getX(), i.getY() + SPRITE_SIZE / 2, 5 + ((Invader) i).getSprite(), 0, 400, false));
+                            ((Invader) i).setReloadTimer(30);
+                        }
                     }
 
                     for (SpaceEntity b : beams)
                     {
                         b.update(fr.getFrameLength());
+
+                        b.collidesWith(player);
+
                         for (SpaceEntity i : invaders)
                         {
                             b.collidesWith(i);
@@ -163,7 +174,10 @@ public class Application
                         gc.drawImage(sprites[i.getSprite()], i.getX() - SPRITE_SIZE / 2, i.getY() - SPRITE_SIZE / 2);
                     }
 
-                    gc.drawImage(sprites[player.getSprite()], player.getX() - SPRITE_SIZE / 2, player.getY() - SPRITE_SIZE / 2);
+                    if (player.alive())
+                    {
+                        gc.drawImage(sprites[player.getSprite()], player.getX() - SPRITE_SIZE / 2, player.getY() - SPRITE_SIZE / 2);
+                    }
 
                     for (SpaceEntity b : beams)
                     {

@@ -1,7 +1,7 @@
 import java.util.Set;
 import java.util.Iterator;
 
-public class SpaceEntity
+public abstract class SpaceEntity
 {
 
     protected int sprite;
@@ -11,13 +11,14 @@ public class SpaceEntity
     protected double dy;
     protected boolean expired;
     protected double r;
+    protected boolean friendly;
 
     public SpaceEntity(double x, double y, double r, int sprite)
     {
         this.x = x;
         this.y = y;        
         this.sprite = sprite;        
-        this.r = r;
+        this.r = r;        
     }
 
     public void setVelocity(double dx, double dy)
@@ -58,6 +59,7 @@ public class SpaceEntity
 
     public boolean collidesWith(SpaceEntity other)
     {
+        if (expired || other.expired || friendly == other.friendly) return false;
         if (Math.pow(x - other.x, 2) + Math.pow(y - other.y, 2) < Math.pow(r + other.r, 2))
         {
             expired = true;
