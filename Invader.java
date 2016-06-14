@@ -19,8 +19,8 @@ public class Invader extends SpaceEntity
     public void update(double frameLength)
     {
         super.update(frameLength);
-        if (x > Application.WINDOW_WIDTH - Application.SPRITE_SIZE / 2) edgeReached = true;
-        if (x < Application.SPRITE_SIZE / 2) edgeReached = true;
+        if (x > Application.WINDOW_WIDTH - Application.SPRITE_SIZE / 2 && dx > 0) edgeReached = true;
+        if (x < Application.SPRITE_SIZE / 2 && dx < 0) edgeReached = true;
 
         if (reloadTimer > 0) reloadTimer -= frameLength;
         if (reloadTimer < 0) reloadTimer = 0;
