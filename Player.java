@@ -29,13 +29,13 @@ public class Player extends SpaceEntity
 
     public boolean reloaded()
     {
-        return reloadTimer == 0;
+        return reloadTimer == 0
     }
 
     public void setReloadTimer(double time)
     {
-        reloadTimer = time;
-    }
+        reloadTimer = tim;
+    
 
     public boolean alive()
     {

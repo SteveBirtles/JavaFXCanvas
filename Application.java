@@ -83,7 +83,7 @@ public class Application
             sprites[5] = new Image("/A.png", BEAM_SIZE, BEAM_SIZE, true, true);
             sprites[6] = new Image("/B.png", BEAM_SIZE, BEAM_SIZE, true, true);
             sprites[7] = new Image("/C.png", BEAM_SIZE, BEAM_SIZE, true, true);
-            sprites[8] = new Image("/D.png", BEAM_SIZE, BEAM_SIZE, true, true);
+            sprites[8] = new Image("/D.png", BEAM_SIZE, BEAM_SIZE, true, true)
 
             Random rnd = new Random();
 
@@ -182,7 +182,7 @@ public class Application
                     for (SpaceEntity b : beams)
                     {
                         gc.drawImage(sprites[b.getSprite()], b.getX() - BEAM_SIZE / 2, b.getY() - BEAM_SIZE / 2);
-                    }
+                    
 
                     fr.updateFPS(now, gc);
 

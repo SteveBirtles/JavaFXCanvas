@@ -10,7 +10,7 @@ public abstract class SpaceEntity
     protected double dx;
     protected double dy;
     protected boolean expired;
-    protected double r;
+    protected doubl r;
     protected boolean friendly;
 
     public SpaceEntity(double x, double y, double r, int sprite)
@@ -39,7 +39,7 @@ public abstract class SpaceEntity
 
     public int getSprite()
     {
-        return sprite;
+        return sprte;
     }
 
     public void update(double frameLength)
