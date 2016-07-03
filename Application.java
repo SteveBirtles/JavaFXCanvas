@@ -14,14 +14,14 @@ import javafx.scene.input.KeyCode;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Random;
+import javafx.scene.effect.Effect;
+import javafx.scene.effect.ColorAdjust;
 
 public class Application
 {
 
     public static final int WINDOW_WIDTH = 1024;
     public static final int WINDOW_HEIGHT = 768;
-    public static final int SPRITE_SIZE = 64;
-    public static final int BEAM_SIZE = 32;
 
     static Set<KeyCode> keysPressed = new HashSet<>();
 
@@ -38,17 +38,14 @@ public class Application
             System.out.println("Application Starting...");
 
             FrameRegulator fr = new FrameRegulator();
-
-            Set<SpaceEntity> invaders = new HashSet<>();
-            Player player = new Player(512, 700);
-            Set<SpaceEntity> beams = new HashSet<>();
+            Random rnd = new Random();
 
             Group root = new Group();
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             Canvas canvas = new Canvas();
 
-            stage.setTitle("JavaFX Space Invaders");
+            stage.setTitle("JavaFX Canvas Demo");
             stage.setResizable(false);
             stage.setScene(scene);                        
             stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
@@ -72,35 +69,16 @@ public class Application
             gc.setStroke(Color.WHITE);
             gc.setFont(new Font("Arial", 14));    
 
-            Image background = new Image("/background.jpg");
+            Image image = new Image("/sprite.png");
 
-            Image[] sprites = new Image[9];
-            sprites[0] = new Image("/0.png", SPRITE_SIZE, SPRITE_SIZE, true, true);
-            sprites[1] = new Image("/1.png", SPRITE_SIZE, SPRITE_SIZE, true, true);
-            sprites[2] = new Image("/2.png", SPRITE_SIZE, SPRITE_SIZE, true, true);
-            sprites[3] = new Image("/3.png", SPRITE_SIZE, SPRITE_SIZE, true, true);
-            sprites[4] = new Image("/4.png", SPRITE_SIZE, SPRITE_SIZE, true, true);
-            sprites[5] = new Image("/A.png", BEAM_SIZE, BEAM_SIZE, true, true);
-            sprites[6] = new Image("/B.png", BEAM_SIZE, BEAM_SIZE, true, true);
-            sprites[7] = new Image("/C.png", BEAM_SIZE, BEAM_SIZE, true, true);
-            sprites[8] = new Image("/D.png", BEAM_SIZE, BEAM_SIZE, true, true);
+            Set<Sprite> sprites = new HashSet<>();
 
-            Random rnd = new Random();
-
-            for (int x = 0; x < 12; x++)
+            for (int i = 0; i < 100; i++)
             {
-                for (int y = 0; y < 6; y++)
-                {
-                    int sprite;
-                    if (y < 2) sprite = 1;
-                    else if (y < 4) sprite = 2;
-                    else sprite = 3;
+                Sprite s = new Sprite(rnd.nextInt(WINDOW_WIDTH), rnd.nextInt(WINDOW_HEIGHT), 32, image);
+                s.setVelocity(rnd.nextDouble()*100-50, rnd.nextDouble()*100-50);
+                sprites.add(s);
 
-                    Invader i = new Invader(x * 70 + 40, y * 50 + 40, sprite);                                        
-
-                    i.setVelocity(50, 0);
-                    invaders.add(i);
-                }
             }
 
             new AnimationTimer() {
@@ -109,81 +87,27 @@ public class Application
 
                     for(KeyCode k : keysPressed)
                     {
-                        if (k == KeyCode.ESCAPE) Application.terminate();
-
-                        if (player.alive())
-                        {
-                            if (k == KeyCode.LEFT) 
-                                player.setVelocity(-400, 0);
-                            else if (k == KeyCode.RIGHT)
-                                player.setVelocity(400, 0);
-
-                            if (k == KeyCode.SPACE)
-                            {
-                                if (player.reloaded())
-                                {
-                                    beams.add(new Beam(player.getX(), player.getY() - SPRITE_SIZE / 2, 5, 0, -600, true));
-                                    player.setReloadTimer(0.333);
-                                }
-                            }
-                        }
+                        if (k == KeyCode.ESCAPE) Application.terminate();                        
                     }
 
-                    for (SpaceEntity i : invaders)
+                    for (Sprite s: sprites)
                     {
-                        i.update(fr.getFrameLength());
-
-                        if (((Invader) i).reloaded())
-                        {
-                            beams.add(new Beam(i.getX(), i.getY() + SPRITE_SIZE / 2, 5 + ((Invader) i).getSprite(), 0, 400, false));
-                            ((Invader) i).setReloadTimer(30);
-                        }
+                        s.update(fr.getFrameLength());
                     }
+                    Sprite.clearUpExired(sprites);
 
-                    for (SpaceEntity b : beams)
+                    gc.setFill(Color.BLACK);
+                    gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
+
+                    ColorAdjust colorAdjust = new ColorAdjust();
+                    colorAdjust.setSaturation(1);
+
+                    for (Sprite s : sprites)
                     {
-                        b.update(fr.getFrameLength());
-
-                        b.collidesWith(player);
-
-                        for (SpaceEntity i : invaders)
-                        {
-                            b.collidesWith(i);
-                        }
-                    }                                       
-
-                    SpaceEntity.clearUpExired(beams);
-                    SpaceEntity.clearUpExired(invaders);
-
-                    player.update(fr.getFrameLength());
-
-                    if (Invader.checkIfEdgeReached())
-                    {
-                        for (SpaceEntity i : invaders)
-                        {                            
-                            ((Invader) i).reverseDirection();
-                            ((Invader) i).nudgeDown();
-                        }
+                        colorAdjust.setHue(3.14159 * (s.getX() / WINDOW_WIDTH - 0.5));
+                        gc.setEffect(colorAdjust);
+                        gc.drawImage(s.getImage(), s.getX() - s.getImage().getWidth() / 2, s.getY() - s.getImage().getHeight() / 2);
                     }
-
-                    gc.clearRect(0, 0, stage.getWidth(), stage.getHeight());
-                    gc.drawImage(background, 0, 0);
-
-                    for (SpaceEntity i : invaders)
-                    {
-                        gc.drawImage(sprites[i.getSprite()], i.getX() - SPRITE_SIZE / 2, i.getY() - SPRITE_SIZE / 2);
-                    }
-
-                    if (player.alive())
-                    {
-                        gc.drawImage(sprites[player.getSprite()], player.getX() - SPRITE_SIZE / 2, player.getY() - SPRITE_SIZE / 2);
-                    }
-
-                    for (SpaceEntity b : beams)
-                    {
-                        gc.drawImage(sprites[b.getSprite()], b.getX() - BEAM_SIZE / 2, b.getY() - BEAM_SIZE / 2);
-                    }
-
                     fr.updateFPS(now, gc);
 
                 }
