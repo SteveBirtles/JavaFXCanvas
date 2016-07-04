@@ -4,18 +4,16 @@ import javafx.stage.Stage;
 import javafx.event.EventHandler;
 import javafx.stage.WindowEvent;
 import javafx.scene.*;
+import javafx.scene.text.*;
+import javafx.scene.input.*;
 import javafx.scene.paint.*;
 import javafx.scene.image.*;
 import javafx.scene.canvas.*; 
-import javafx.scene.input.KeyEvent;
+import javafx.scene.effect.*;
 import javafx.animation.AnimationTimer; 
-import javafx.scene.text.Font;
-import javafx.scene.input.KeyCode;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Random;
-import javafx.scene.effect.Effect;
-import javafx.scene.effect.ColorAdjust;
 
 public class Application
 {
@@ -85,10 +83,14 @@ public class Application
                 @Override
                 public void handle(long now) {
 
+                    /* INPUT */
+
                     for(KeyCode k : keysPressed)
                     {
                         if (k == KeyCode.ESCAPE) Application.terminate();                        
                     }
+
+                    /* PROCESS */
 
                     for (Sprite s: sprites)
                     {
@@ -96,16 +98,13 @@ public class Application
                     }
                     Sprite.clearUpExired(sprites);
 
+                    /* OUTPUT */
+
                     gc.setFill(Color.BLACK);
                     gc.fillRect(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT);
 
-                    ColorAdjust colorAdjust = new ColorAdjust();
-                    colorAdjust.setSaturation(1);
-
                     for (Sprite s : sprites)
                     {
-                        colorAdjust.setHue(3.14159 * (s.getX() / WINDOW_WIDTH - 0.5));
-                        gc.setEffect(colorAdjust);
                         gc.drawImage(s.getImage(), s.getX() - s.getImage().getWidth() / 2, s.getY() - s.getImage().getHeight() / 2);
                     }
                     fr.updateFPS(now, gc);
