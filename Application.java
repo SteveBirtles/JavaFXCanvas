@@ -71,7 +71,7 @@ public class Application
 
             Set<Sprite> sprites = new HashSet<>();
 
-            for (int i = 0; i <= 99; i++)
+            for (int i = 0; i <= 1000; i++)
             {
                 Sprite s = new Sprite(rnd.nextInt(WINDOW_WIDTH), rnd.nextInt(WINDOW_HEIGHT), 32, image);
                 s.setVelocity(rnd.nextDouble()*100-50, rnd.nextDouble()*100-50);
